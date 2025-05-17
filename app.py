@@ -127,3 +127,10 @@ def settings_page():
         else:
             message = "ÐÐµÐ²ÐµÑÐ½ÑÐ¹ ÑÐµÐºÑÑÐ¸Ð¹ Ð¿Ð°ÑÐ¾Ð»Ñ"
     return render_template("settings.html", message=message)
+
+
+import os
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
