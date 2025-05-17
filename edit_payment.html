@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Редактировать платеж</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header><h1>Редактировать платеж</h1></header>
+  <section class="card-group">
+    <div class="card">
+      <form method="post">
+        <label>Сумма (UZS):</label><br>
+        <input type="number" name="amount" value="{{ payment.amount }}" required><br><br>
+
+        <label>Статус:</label><br>
+        <select name="status">
+          <option value="В обработке" {% if payment.status == 'В обработке' %}selected{% endif %}>В обработке</option>
+          <option value="Завершено" {% if payment.status == 'Завершено' %}selected{% endif %}>Завершено</option>
+          <option value="Срок проверки истек" {% if payment.status == 'Срок проверки истек' %}selected{% endif %}>Срок проверки истек</option>
+        </select><br><br>
+
+        <button type="submit">Сохранить</button>
+      </form>
+    </div>
+  </section>
+  <a href="/payments">← Назад к платежам</a>
+</body>
+</html>

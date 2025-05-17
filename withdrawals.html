@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Выплаты</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header><h1>Выплаты</h1></header>
+
+  <section class="card-group">
+    {% if withdrawals %}
+    <div class="table-card">
+      <table>
+        <thead><tr><th>Сумма</th><th>Статус</th><th>Дата</th><td>
+        <a href="/withdrawals/edit/{{ w.id }}">✏️</a>
+        <form action="/withdrawals/delete/{{ w.id }}" method="post" style="display:inline;">
+          <button type="submit" onclick="return confirm('Удалить запись?')" style="border:none;background:none;color:red;">🗑️</button>
+        </form>
+      </td>
+    </tr></thead>
+        <tbody>
+        {% for w in withdrawals %}
+          <tr>
+            <td>{{ w.amount }} uzs</td>
+            <td><span class="badge {% if w.status == 'Завершено' %}green{% else %}red{% endif %}">{{ w.status }}</span></td>
+            <td>{{ w.date }}</td>
+          <td>
+        <a href="/withdrawals/edit/{{ w.id }}">✏️</a>
+        <form action="/withdrawals/delete/{{ w.id }}" method="post" style="display:inline;">
+          <button type="submit" onclick="return confirm('Удалить запись?')" style="border:none;background:none;color:red;">🗑️</button>
+        </form>
+      </td>
+    </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+      <div class="table-card empty">
+        <p class="no-data">Выплат не было</p>
+      </div>
+    {% endif %}
+  </section>
+
+  <a href="/">← Назад</a>
+</body>
+</html>

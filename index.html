@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Дашборд</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header><h1>Дашборд</h1></header>
+
+  <section class="card-group">
+    <div class="card">
+      <canvas id="chart" height="200"></canvas>
+    </div>
+  </section>
+
+  <section class="card-group">
+    <a href="/payments">Платежи</a> | <a href="/withdrawals">Выплаты</a>
+  </section>
+
+  <script>
+    const chartData = {
+      labels: {{ data|map(attribute=0)|list }},
+      datasets: [{
+        label: 'Выручка (UZS)',
+        data: {{ data|map(attribute=1)|list }},
+        borderWidth: 2,
+        fill: false,
+        borderColor: '#007bff'
+      }]
+    };
+
+    const ctx = document.getElementById('chart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: chartData,
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } }
+      }
+    });
+  </script>
+</body>
+</html>
