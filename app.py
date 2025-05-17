@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, session, url_for
 import sqlite3
+import json
 
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
@@ -13,17 +14,26 @@ def query_db(query, args=(), one=False):
     conn.close()
     return (rv[0] if rv else None) if one else rv
 
+def load_settings():
+    with open("settings.json", "r", encoding="utf-8") as f:
+        return json.load(f)
+
+def save_settings(settings):
+    with open("settings.json", "w", encoding="utf-8") as f:
+        json.dump(settings, f)
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     error = None
+    settings = load_settings()
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        if username == "admin" and password == "1234":
+        if username == settings["username"] and password == settings["password"]:
             session["logged_in"] = True
             return redirect(url_for("index"))
         else:
-            error = "Неверный логин или пароль"
+            error = "ÐÐµÐ²ÐµÑÐ½ÑÐ¹ Ð»Ð¾Ð³Ð¸Ð½ Ð¸Ð»Ð¸ Ð¿Ð°ÑÐ¾Ð»Ñ"
     return render_template("login.html", error=error)
 
 @app.route("/logout")
@@ -50,12 +60,6 @@ def payments():
         payments = query_db("SELECT * FROM payments")
     return render_template("payments.html", payments=payments, selected=status_filter)
 
-@app.route("/withdrawals")
-def withdrawals():
-    withdrawals = query_db("SELECT * FROM withdrawals")
-    return render_template("withdrawals.html", withdrawals=withdrawals)
-
-
 @app.route("/payments/edit/<int:payment_id>", methods=["GET", "POST"])
 def edit_payment(payment_id):
     payment = query_db("SELECT * FROM payments WHERE id=?", [payment_id], one=True)
@@ -79,34 +83,10 @@ def delete_payment(payment_id):
     conn.close()
     return redirect(url_for("payments"))
 
-
-import json
-from werkzeug.security import generate_password_hash, check_password_hash
-
-def load_settings():
-    with open("settings.json", "r", encoding="utf-8") as f:
-        return json.load(f)
-
-def save_settings(settings):
-    with open("settings.json", "w", encoding="utf-8") as f:
-        json.dump(settings, f)
-
-@app.route("/settings", methods=["GET", "POST"])
-def settings_page():
-    settings = load_settings()
-    message = ""
-    if request.method == "POST":
-        current = request.form["current_password"]
-        new_user = request.form["username"]
-        new_pass = request.form["new_password"]
-        if current == settings["password"]:
-            settings["username"] = new_user
-            settings["password"] = new_pass
-            save_settings(settings)
-            message = "Настройки обновлены"
-        else:
-            message = "Неверный текущий пароль"
-    return render_template("settings.html", message=message)
+@app.route("/withdrawals")
+def withdrawals():
+    withdrawals = query_db("SELECT * FROM withdrawals")
+    return render_template("withdrawals.html", withdrawals=withdrawals)
 
 @app.route("/withdrawals/edit/<int:withdrawal_id>", methods=["GET", "POST"])
 def edit_withdrawal(withdrawal_id):
@@ -131,17 +111,19 @@ def delete_withdrawal(withdrawal_id):
     conn.close()
     return redirect(url_for("withdrawals"))
 
-# Изменим login() с использованием settings.json
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    error = None
+@app.route("/settings", methods=["GET", "POST"])
+def settings_page():
     settings = load_settings()
+    message = ""
     if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
-        if username == settings["username"] and password == settings["password"]:
-            session["logged_in"] = True
-            return redirect(url_for("index"))
+        current = request.form["current_password"]
+        new_user = request.form["username"]
+        new_pass = request.form["new_password"]
+        if current == settings["password"]:
+            settings["username"] = new_user
+            settings["password"] = new_pass
+            save_settings(settings)
+            message = "ÐÐ°ÑÑÑÐ¾Ð¹ÐºÐ¸ Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ñ"
         else:
-            error = "Неверный логин или пароль"
-    return render_template("login.html", error=error)
+            message = "ÐÐµÐ²ÐµÑÐ½ÑÐ¹ ÑÐµÐºÑÑÐ¸Ð¹ Ð¿Ð°ÑÐ¾Ð»Ñ"
+    return render_template("settings.html", message=message)
