@@ -1,0 +1,112 @@
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.3s, color 0.3s;
+}
+:root {
+  --bg: #f8f9fa;
+  --text: #333;
+  --card: #fff;
+}
+body.dark {
+  --bg: #121212;
+  --text: #e0e0e0;
+  --card: #1e1e1e;
+}
+header {
+  padding: 20px;
+  font-size: 1.4em;
+  font-weight: bold;
+  background: var(--card);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.toggle-theme {
+  cursor: pointer;
+  font-size: 0.9em;
+  padding: 6px 12px;
+  background: none;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+.card-group {
+  padding: 15px;
+}
+.card, .table-card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+.filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+.filters select, .filters input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+  font-size: 0.95em;
+}
+.badge {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.8em;
+  color: #fff;
+}
+.green { background: #28a745; }
+.yellow { background: #ffc107; color: #333; }
+.red { background: #dc3545; }
+nav.bottom {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: var(--card);
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  box-shadow: 0 -1px 3px rgba(0,0,0,0.1);
+}
+nav.bottom a {
+  text-align: center;
+  text-decoration: none;
+  color: var(--text);
+  font-size: 0.8em;
+}
+nav.bottom a span {
+  display: block;
+  font-size: 1.2em;
+}
+.toast {
+  position: fixed;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 0.85em;
+  display: none;
+}
+@media(max-width: 600px) {
+  th, td { font-size: 0.85em; }
+  .card, .table-card { padding: 10px; }
+}

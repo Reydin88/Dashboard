@@ -7,7 +7,10 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <header><h1>Дашборд</h1></header>
+  <header>
+    <span>Дашборд</span>
+    <button class="toggle-theme" onclick="toggleTheme()">🌓 Тема</button>
+  </header>
 
   <section class="card-group">
     <div class="card">
@@ -16,8 +19,13 @@
   </section>
 
   <section class="card-group">
-    <a href="/payments">Платежи</a> | <a href="/withdrawals">Выплаты</a>
+    <div class="card">
+      <a href="/backup">Скачать резервную копию базы</a>
+    </div>
   </section>
+
+  {{ nav|safe }}
+  {{ js|safe }}
 
   <script>
     const chartData = {
@@ -30,7 +38,6 @@
         borderColor: '#007bff'
       }]
     };
-
     const ctx = document.getElementById('chart').getContext('2d');
     new Chart(ctx, {
       type: 'line',
