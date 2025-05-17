@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Платежи</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header><h1>Платежи</h1></header>
+
+  <section class="card-group">
+    <form method="get" class="filters">
+      <select name="status" onchange="this.form.submit()">
+        <option value="">Все статусы</option>
+        <option value="В обработке" {% if selected == 'В обработке' %}selected{% endif %}>В обработке</option>
+        <option value="Завершено" {% if selected == 'Завершено' %}selected{% endif %}>Завершено</option>
+        <option value="Срок проверки истек" {% if selected == 'Срок проверки истек' %}selected{% endif %}>Срок проверки истек</option>
+      </select>
+    </form>
+
+    <div class="table-card">
+      <table>
+        <thead>
+          <tr><th>Карта</th><th>Сумма</th><th>Статус</th><th>Дата</th><td>
+        <a href="/payments/edit/{{ p.id }}">✏️</a>
+        <form action="/payments/delete/{{ p.id }}" method="post" style="display:inline;">
+          <button type="submit" onclick="return confirm('Удалить запись?')" style="border:none;background:none;color:red;">🗑️</button>
+        </form>
+      </td>
+    </tr>
+        </thead>
+        <tbody>
+          {% for p in payments %}
+          <tr>
+            <td>{{ p.card }}</td>
+            <td>{{ p.amount }} uzs</td>
+            <td><span class="badge {% if p.status == 'Завершено' %}green{% elif p.status == 'В обработке' %}yellow{% else %}red{% endif %}">{{ p.status }}</span></td>
+            <td>{{ p.date }}</td>
+          <td>
+        <a href="/payments/edit/{{ p.id }}">✏️</a>
+        <form action="/payments/delete/{{ p.id }}" method="post" style="display:inline;">
+          <button type="submit" onclick="return confirm('Удалить запись?')" style="border:none;background:none;color:red;">🗑️</button>
+        </form>
+      </td>
+    </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <a href="/">← Назад</a>
+</body>
+</html>

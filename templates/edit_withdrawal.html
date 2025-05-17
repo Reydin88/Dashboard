@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Редактировать выплату</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header><h1>Редактировать выплату</h1></header>
+  <section class="card-group">
+    <div class="card">
+      <form method="post">
+        <label>Сумма (UZS):</label><br>
+        <input type="number" name="amount" value="{{ withdrawal.amount }}" required><br><br>
+
+        <label>Статус:</label><br>
+        <select name="status">
+          <option value="Завершено" {% if withdrawal.status == 'Завершено' %}selected{% endif %}>Завершено</option>
+          <option value="Не оплачено" {% if withdrawal.status == 'Не оплачено' %}selected{% endif %}>Не оплачено</option>
+        </select><br><br>
+
+        <button type="submit">Сохранить</button>
+      </form>
+    </div>
+  </section>
+  <a href="/withdrawals">← Назад</a>
+</body>
+</html>
